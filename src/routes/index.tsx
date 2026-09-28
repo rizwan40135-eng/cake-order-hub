@@ -19,9 +19,9 @@ const IMG: Record<string, string> = { chocolate, redvelvet, strawberry, vanilla,
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Crumb & Co. — Order Custom Cakes Online" },
+      { title: "Kadiri Cake House — Order Custom Cakes Online" },
       { name: "description", content: "Choose your cake, size, shape and message. Freshly baked and delivered." },
-      { property: "og:title", content: "Crumb & Co. — Order Custom Cakes Online" },
+      { property: "og:title", content: "Kadiri Cake House — Order Custom Cakes Online" },
       { property: "og:description", content: "Choose your cake, size, shape and message. Freshly baked and delivered." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -46,9 +46,9 @@ function Index() {
       <header className="sticky top-0 z-30 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <div className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-full bg-cocoa font-display text-lg text-cocoa-foreground">C</span>
+            <span className="grid size-10 place-items-center rounded-full bg-cocoa font-display text-lg text-cocoa-foreground">K</span>
             <div>
-              <p className="font-display text-xl leading-none">Crumb &amp; Co.</p>
+              <p className="font-display text-xl leading-none">Kadiri Cake House</p>
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Cakes only</p>
             </div>
           </div>
@@ -139,7 +139,7 @@ function Index() {
         </main>
       </div>
 
-      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Crumb &amp; Co. · Baked with love</footer>
+      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Kadiri Cake House · Baked with love</footer>
 
       {picking && <Customize cake={picking} onClose={() => setPicking(null)} onAdd={(l) => { setCart([...cart, { ...l, key: Date.now() }]); setPicking(null); }} />}
       {checkout && <Checkout cart={cart} total={cartTotal} onClose={() => setCheckout(false)} onDone={(r) => { setCart([]); setCheckout(false); setDone(r); }} />}
