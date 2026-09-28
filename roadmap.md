@@ -1,5 +1,5 @@
 # Roadmap
-- [ ] Layout: header, cake banner, cake grid, left sidebar with orders/totals
-- [ ] Cake customization (size, flavour, frosting, message) + order form storing customer details
-- [ ] Track number of cakes and revenue
-- [ ] Later: bakery login to view full customer list (private)
+- [x] Layout: header, cake banner, cake grid, left sidebar with orders/totals
+- [x] Cake customization (size, type, shape, extras, message, qty) + order form storing customer details
+- [x] Track number of cakes and revenue
+- [ ] Bakery login to view full customer list and update order status (waiting on user's go-ahead)
