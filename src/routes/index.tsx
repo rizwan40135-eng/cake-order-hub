@@ -134,9 +134,6 @@ function Index() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return <div><p className="font-display text-2xl">{value}</p><p className="text-xs opacity-70">{label}</p></div>;
-}
 
 function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
