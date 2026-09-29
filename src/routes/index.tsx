@@ -78,26 +78,6 @@ function Index() {
 
       <div className="mx-auto grid max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[300px_1fr]">
         <aside id="orders" className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-          <div className="rounded-2xl bg-cocoa p-5 text-cocoa-foreground">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-70">Bakery orders</p>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <Stat label="Orders" value={stats.data?.orders ?? "–"} />
-              <Stat label="Cakes sold" value={stats.data?.cakes ?? "–"} />
-              <Stat label="Revenue" value={stats.data ? inr(Number(stats.data.revenue)) : "–"} />
-              <Stat label="Customers" value={stats.data?.customers ?? "–"} />
-            </div>
-          </div>
-          <div className="rounded-2xl border bg-card p-5">
-            <p className="font-display text-lg">Recent orders</p>
-            <ul className="mt-3 space-y-2 text-sm">
-              {stats.data?.recent.length ? stats.data.recent.map((r, i) => (
-                <li key={i} className="flex justify-between border-b pb-2 last:border-0">
-                  <span>{r.name} · {r.cake_count} cake{r.cake_count > 1 ? "s" : ""}</span>
-                  <span className="font-medium">{inr(Number(r.total))}</span>
-                </li>
-              )) : <li className="text-muted-foreground">No orders yet.</li>}
-            </ul>
-          </div>
           <div className="rounded-2xl border bg-card p-5">
             <p className="font-display text-lg">Your cart</p>
             {cart.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">Pick a cake to start.</p> : (
