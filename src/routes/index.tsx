@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import banner from "@/assets/banner.jpg";
@@ -12,7 +12,7 @@ import blackforest from "@/assets/cake-blackforest.jpg";
 import {
   CAKES, SIZES, TYPES, SHAPES, EXTRAS, priceLine, inr, type Cake, type LineInput,
 } from "@/lib/cakes-data";
-import { getOrderStats, placeOrder } from "@/lib/orders.functions";
+import { placeOrder } from "@/lib/orders.functions";
 
 const IMG: Record<string, string> = { chocolate, redvelvet, strawberry, vanilla, butterscotch, blackforest };
 
@@ -37,8 +37,6 @@ function Index() {
   const [cart, setCart] = useState<CartLine[]>([]);
   const [checkout, setCheckout] = useState(false);
   const [done, setDone] = useState<{ total: number; cakeCount: number } | null>(null);
-  const fetchStats = useServerFn(getOrderStats);
-  const stats = useQuery({ queryKey: ["stats"], queryFn: () => fetchStats() });
   const cartTotal = cart.reduce((s, l) => s + priceLine(l), 0);
 
   return (
@@ -54,7 +52,7 @@ function Index() {
           </div>
           <nav className="hidden gap-6 text-sm text-muted-foreground md:flex">
             <a href="#cakes" className="hover:text-foreground">Our cakes</a>
-            <a href="#orders" className="hover:text-foreground">Orders</a>
+            <a href="#orders" className="hover:text-foreground">Your cart</a>
           </nav>
           <button onClick={() => cart.length && setCheckout(true)} className="rounded-full bg-cocoa px-5 py-2 text-sm font-medium text-cocoa-foreground">
             Cart · {cart.reduce((s, l) => s + l.qty, 0)}
@@ -78,26 +76,6 @@ function Index() {
 
       <div className="mx-auto grid max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[300px_1fr]">
         <aside id="orders" className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
-          <div className="rounded-2xl bg-cocoa p-5 text-cocoa-foreground">
-            <p className="text-xs uppercase tracking-[0.2em] opacity-70">Bakery orders</p>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <Stat label="Orders" value={stats.data?.orders ?? "–"} />
-              <Stat label="Cakes sold" value={stats.data?.cakes ?? "–"} />
-              <Stat label="Revenue" value={stats.data ? inr(Number(stats.data.revenue)) : "–"} />
-              <Stat label="Customers" value={stats.data?.customers ?? "–"} />
-            </div>
-          </div>
-          <div className="rounded-2xl border bg-card p-5">
-            <p className="font-display text-lg">Recent orders</p>
-            <ul className="mt-3 space-y-2 text-sm">
-              {stats.data?.recent.length ? stats.data.recent.map((r, i) => (
-                <li key={i} className="flex justify-between border-b pb-2 last:border-0">
-                  <span>{r.name} · {r.cake_count} cake{r.cake_count > 1 ? "s" : ""}</span>
-                  <span className="font-medium">{inr(Number(r.total))}</span>
-                </li>
-              )) : <li className="text-muted-foreground">No orders yet.</li>}
-            </ul>
-          </div>
           <div className="rounded-2xl border bg-card p-5">
             <p className="font-display text-lg">Your cart</p>
             {cart.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">Pick a cake to start.</p> : (
@@ -139,7 +117,7 @@ function Index() {
         </main>
       </div>
 
-      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Kadiri Cake House · Baked with love</footer>
+      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Kadiri Cake House · Baked with love · <a href="/auth" className="underline">Bakery login</a></footer>
 
       {picking && <Customize cake={picking} onClose={() => setPicking(null)} onAdd={(l) => { setCart([...cart, { ...l, key: Date.now() }]); setPicking(null); }} />}
       {checkout && <Checkout cart={cart} total={cartTotal} onClose={() => setCheckout(false)} onDone={(r) => { setCart([]); setCheckout(false); setDone(r); }} />}
@@ -154,9 +132,6 @@ function Index() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return <div><p className="font-display text-2xl">{value}</p><p className="text-xs opacity-70">{label}</p></div>;
-}
 
 function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
@@ -217,7 +192,6 @@ function Checkout({ cart, total, onClose, onDone }: { cart: CartLine[]; total: n
     setBusy(true); setErr("");
     try {
       const r = await submit({ data: { ...f, items: cart.map(({ key: _k, ...l }) => l) } });
-      qc.invalidateQueries({ queryKey: ["stats"] });
       onDone(r);
     } catch {
       setErr("Please check your details (name, valid phone, date) and try again.");
