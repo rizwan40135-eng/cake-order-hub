@@ -8,6 +8,13 @@
       "when": 1790623576964,
       "tag": "0000_create_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790643203711,
+      "tag": "0001_admin_roles",
+      "breakpoints": true
     }
   ]
 }
