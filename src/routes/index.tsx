@@ -117,7 +117,7 @@ function Index() {
         </main>
       </div>
 
-      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Kadiri Cake House · Baked with love</footer>
+      <footer className="border-t py-8 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Kadiri Cake House · Baked with love · <a href="/auth" className="underline">Bakery login</a></footer>
 
       {picking && <Customize cake={picking} onClose={() => setPicking(null)} onAdd={(l) => { setCart([...cart, { ...l, key: Date.now() }]); setPicking(null); }} />}
       {checkout && <Checkout cart={cart} total={cartTotal} onClose={() => setCheckout(false)} onDone={(r) => { setCart([]); setCheckout(false); setDone(r); }} />}
