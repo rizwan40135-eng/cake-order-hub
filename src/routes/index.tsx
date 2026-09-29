@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import banner from "@/assets/banner.jpg";
@@ -12,7 +12,7 @@ import blackforest from "@/assets/cake-blackforest.jpg";
 import {
   CAKES, SIZES, TYPES, SHAPES, EXTRAS, priceLine, inr, type Cake, type LineInput,
 } from "@/lib/cakes-data";
-import { getOrderStats, placeOrder } from "@/lib/orders.functions";
+import { placeOrder } from "@/lib/orders.functions";
 
 const IMG: Record<string, string> = { chocolate, redvelvet, strawberry, vanilla, butterscotch, blackforest };
 
@@ -37,8 +37,6 @@ function Index() {
   const [cart, setCart] = useState<CartLine[]>([]);
   const [checkout, setCheckout] = useState(false);
   const [done, setDone] = useState<{ total: number; cakeCount: number } | null>(null);
-  const fetchStats = useServerFn(getOrderStats);
-  const stats = useQuery({ queryKey: ["stats"], queryFn: () => fetchStats() });
   const cartTotal = cart.reduce((s, l) => s + priceLine(l), 0);
 
   return (
@@ -54,7 +52,7 @@ function Index() {
           </div>
           <nav className="hidden gap-6 text-sm text-muted-foreground md:flex">
             <a href="#cakes" className="hover:text-foreground">Our cakes</a>
-            <a href="#orders" className="hover:text-foreground">Orders</a>
+            <a href="#orders" className="hover:text-foreground">Your cart</a>
           </nav>
           <button onClick={() => cart.length && setCheckout(true)} className="rounded-full bg-cocoa px-5 py-2 text-sm font-medium text-cocoa-foreground">
             Cart · {cart.reduce((s, l) => s + l.qty, 0)}
@@ -194,7 +192,6 @@ function Checkout({ cart, total, onClose, onDone }: { cart: CartLine[]; total: n
     setBusy(true); setErr("");
     try {
       const r = await submit({ data: { ...f, items: cart.map(({ key: _k, ...l }) => l) } });
-      qc.invalidateQueries({ queryKey: ["stats"] });
       onDone(r);
     } catch {
       setErr("Please check your details (name, valid phone, date) and try again.");
